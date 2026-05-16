@@ -83,7 +83,7 @@ export default function Contact() {
 
               <div className="flex gap-3">
                 <a
-                  href="#"
+                  href="https://github.com/krishkachhadiya"
                   aria-label="GitHub"
                   className="group inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 text-slate-300 transition-all hover:-translate-y-0.5 hover:border-cyan-400/40 hover:bg-slate-800/60 hover:text-white"
                 >
