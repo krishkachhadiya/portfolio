@@ -65,7 +65,7 @@ export default function Contact() {
             {/* direct links */}
             <div className="mt-8 space-y-3">
               <a
-                href="mailto:hello@example.com"
+                href="mailto:krishkachhadiya@gmail.com"
                 className="group flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition-all hover:-translate-y-0.5 hover:border-cyan-400/40 hover:bg-slate-800/60"
               >
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-500/20 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
@@ -76,7 +76,7 @@ export default function Contact() {
                     Email
                   </p>
                   <p className="text-sm font-semibold text-white">
-                    hello@example.com
+                  krishkachhadiya@gmail.com
                   </p>
                 </div>
               </a>
