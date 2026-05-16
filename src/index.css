@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-/* ---------- Theme tokens ---------- */
+/* ──────────────────────────────────────────
+   Design tokens
+   ────────────────────────────────────────── */
 @theme {
   --color-obsidian-950: #05060a;
   --color-obsidian-900: #0a0d14;
@@ -11,7 +13,9 @@
   --color-neon-pink: #ec4899;
 }
 
-/* ---------- Base ---------- */
+/* ──────────────────────────────────────────
+   Base
+   ────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
@@ -25,10 +29,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom slim scrollbar with neon hint */
+/* slim gradient scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: #05060a;
@@ -39,7 +43,9 @@ body {
   border: 2px solid #05060a;
 }
 
-/* ---------- Reusable utilities ---------- */
+/* ──────────────────────────────────────────
+   Utility: gradient text
+   ────────────────────────────────────────── */
 .gradient-text {
   background: linear-gradient(90deg, #22d3ee 0%, #a855f7 50%, #ec4899 100%);
   -webkit-background-clip: text;
@@ -48,13 +54,19 @@ body {
   color: transparent;
 }
 
+/* ──────────────────────────────────────────
+   Utility: frosted glass
+   ────────────────────────────────────────── */
 .glass {
-  background-color: rgba(10, 13, 20, 0.6);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  background-color: rgba(10, 13, 20, 0.65);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(148, 163, 184, 0.08);
 }
 
+/* ──────────────────────────────────────────
+   Utility: gradient border (mask technique)
+   ────────────────────────────────────────── */
 .neon-border {
   position: relative;
   isolation: isolate;
@@ -75,74 +87,104 @@ body {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
+  opacity: 0.5;
+  transition: opacity 0.35s ease;
 }
 .neon-border:hover::before {
   opacity: 1;
 }
 
-/* Animated background grid */
+/* ──────────────────────────────────────────
+   Background: animated dot-grid
+   ────────────────────────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-/* Glow blob */
+/* ──────────────────────────────────────────
+   Background: glow blob
+   ────────────────────────────────────────── */
 .blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(90px);
-  opacity: 0.45;
+  filter: blur(100px);
+  opacity: 0.5;
   pointer-events: none;
 }
 
-/* ---------- Animations ---------- */
+/* ──────────────────────────────────────────
+   Animations
+   ────────────────────────────────────────── */
+
+/* blinking cursor */
 @keyframes blink {
-  0%, 49% { opacity: 1; }
+  0%, 49%  { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 .cursor-blink {
   animation: blink 1s steps(1) infinite;
 }
 
+/* gentle float */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50%      { transform: translateY(-10px); }
 }
 .float-slow {
   animation: float 6s ease-in-out infinite;
 }
 
+/* initial load fade-up */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .fade-up {
   animation: fadeUp 0.7s ease-out both;
 }
 
+/* shimmer sweep */
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
+  0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 .shimmer {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(168, 85, 247, 0.15) 50%,
+    rgba(168, 85, 247, 0.12) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
   animation: shimmer 3s linear infinite;
 }
 
-/* Floating-label form */
+/* ★ FIX for skill filter: cards always animate in on each render */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.animate-card-in {
+  animation: cardIn 0.45s ease-out both;
+}
+
+/* ──────────────────────────────────────────
+   Floating-label form inputs
+   ────────────────────────────────────────── */
 .float-input {
   background: transparent;
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.15);
   border-radius: 0.75rem;
   padding: 1.25rem 1rem 0.5rem;
   width: 100%;
@@ -152,13 +194,13 @@ body {
 }
 .float-input:focus {
   border-color: #22d3ee;
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
 }
 .float-label {
   position: absolute;
   left: 1rem;
   top: 1rem;
-  color: #94a3b8;
+  color: #64748b;
   pointer-events: none;
   transition: all 0.2s ease;
   font-size: 0.95rem;
@@ -168,17 +210,30 @@ body {
   top: 0.35rem;
   font-size: 0.7rem;
   color: #22d3ee;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-/* Reveal-on-scroll */
+/* ──────────────────────────────────────────
+   Scroll-reveal (IntersectionObserver)
+   ────────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(.25,.46,.45,.94),
+              transform 0.7s cubic-bezier(.25,.46,.45,.94);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ──────────────────────────────────────────
+   Extra: rotate-on-hover (for project icons)
+   ────────────────────────────────────────── */
+.hover-rotate:hover .hover-target {
+  transform: rotate(6deg) scale(1.08);
+}
+.hover-target {
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
 }

@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Mail, Sparkles } from "lucide-react";
 
 /**
- * Hero — headline section with an animated typing sub-headline that
- * cycles through the engineer's main domains. Uses CSS gradient blobs
- * and a subtle grid to create depth.
+ * Hero — bold headline with animated typing sub-headline cycling
+ * through the engineer's key domains. Adds floating particle dots,
+ * layered gradient blobs, and a stat counter strip.
  */
-const ROLES = ["Web Architect", "Android Developer", "Headless CMS Expert"];
+const ROLES = ["Web Architect", "API Engineer", "Headless CMS Expert"];
 
 export default function Hero() {
   const [text, setText] = useState("");
   const [roleIndex, setRoleIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
-  // Type / delete loop with variable speed for a more natural feel.
+  /* ── typing engine ── */
   useEffect(() => {
     const current = ROLES[roleIndex];
-    const delay = deleting ? 45 : 90;
+    const delay = deleting ? 40 : 85;
 
     const timer = setTimeout(() => {
       if (!deleting) {
         const next = current.slice(0, text.length + 1);
         setText(next);
         if (next === current) {
-          setTimeout(() => setDeleting(true), 1500);
+          setTimeout(() => setDeleting(true), 1600);
         }
       } else {
         const next = current.slice(0, text.length - 1);
@@ -34,9 +34,66 @@ export default function Hero() {
         }
       }
     }, delay);
-
     return () => clearTimeout(timer);
   }, [text, deleting, roleIndex]);
+
+  /* ── canvas particle background ── */
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const cvs = canvasRef.current;
+    if (!cvs) return;
+    const ctx = cvs.getContext("2d");
+    if (!ctx) return;
+
+    let w = (cvs.width = window.innerWidth);
+    let h = (cvs.height = window.innerHeight);
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    cvs.width = w * DPR;
+    cvs.height = h * DPR;
+    ctx.scale(DPR, DPR);
+
+    interface P { x: number; y: number; r: number; vx: number; vy: number; a: number }
+    const dots: P[] = Array.from({ length: 55 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.4,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      a: Math.random() * 0.4 + 0.1,
+    }));
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of dots) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(148, 163, 184, ${p.a})`;
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+
+    const onResize = () => {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      cvs.width = w * DPR;
+      cvs.height = h * DPR;
+      ctx.scale(DPR, DPR);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -46,15 +103,20 @@ export default function Hero() {
       id="home"
       className="relative isolate overflow-hidden pt-32 pb-24 sm:pt-40 sm:pb-32"
     >
-      {/* Background layers */}
+      {/* layers */}
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none absolute inset-0 z-0"
+        aria-hidden
+      />
       <div className="absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
       <div className="blob left-[-10%] top-10 h-72 w-72 bg-cyan-500/40" />
       <div className="blob right-[-10%] top-40 h-96 w-96 bg-violet-600/40" />
       <div className="blob bottom-[-10%] left-1/3 h-80 w-80 bg-pink-500/20" />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Eyebrow badge */}
+          {/* badge */}
           <div className="fade-up inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/60 px-4 py-1.5 text-xs font-medium text-slate-300 backdrop-blur">
             <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
             <span>Available for new opportunities</span>
@@ -64,7 +126,7 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Headline */}
+          {/* headline */}
           <h1
             className="fade-up mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl"
             style={{ animationDelay: "0.1s" }}
@@ -74,7 +136,7 @@ export default function Hero() {
             crafting the modern web.
           </h1>
 
-          {/* Animated sub-headline */}
+          {/* typing sub-headline */}
           <p
             className="fade-up mt-6 text-lg text-slate-400 sm:text-xl"
             style={{ animationDelay: "0.2s" }}
@@ -114,7 +176,7 @@ export default function Hero() {
             </button>
           </div>
 
-          {/* Stats strip */}
+          {/* stats */}
           <dl
             className="fade-up mt-16 grid grid-cols-3 gap-4 border-t border-slate-800/80 pt-8"
             style={{ animationDelay: "0.5s" }}

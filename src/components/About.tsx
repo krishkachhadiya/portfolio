@@ -1,39 +1,54 @@
 import { ShieldCheck, Zap, Layers, Boxes } from "lucide-react";
 
 /**
- * About — short bio paired with four highlight cards summarising
- * the engineer's strengths. Uses a two-column layout that collapses
- * to a single column on mobile.
+ * About — two-column layout: narrative on the left with an animated
+ * accent bar, and a 2×2 grid of highlight cards on the right.
+ * Cards feature icon pulse on hover and staggered reveal.
  */
 const HIGHLIGHTS = [
   {
     icon: ShieldCheck,
     title: "Secure by Design",
     desc: "Hardened APIs, role-based access, and defensive validation at every layer.",
+    ring: "ring-emerald-400/20",
+    text: "text-emerald-400",
+    bg: "from-emerald-400/20 to-emerald-500/5",
   },
   {
     icon: Zap,
     title: "Performance First",
     desc: "Static generation, smart caching, and lean bundles for sub-second loads.",
+    ring: "ring-amber-400/20",
+    text: "text-amber-400",
+    bg: "from-amber-400/20 to-amber-500/5",
   },
   {
     icon: Layers,
     title: "Scalable Architecture",
     desc: "Modular services and clean domain boundaries that grow with the product.",
+    ring: "ring-violet-400/20",
+    text: "text-violet-400",
+    bg: "from-violet-400/20 to-violet-500/5",
   },
   {
     icon: Boxes,
     title: "Headless Mindset",
     desc: "Decoupled content models that ship to web, mobile, and any future channel.",
+    ring: "ring-cyan-400/20",
+    text: "text-cyan-400",
+    bg: "from-cyan-400/20 to-cyan-500/5",
   },
 ];
 
 export default function About() {
   return (
-    <section id="about" className="relative py-24 sm:py-32">
+    <section id="about" className="relative py-24 sm:py-32 overflow-hidden">
+      {/* soft divider */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent" />
+
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left — narrative */}
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* ── left narrative ── */}
           <div className="reveal">
             <span className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-400">
               About Me
@@ -50,8 +65,8 @@ export default function About() {
                 shipping software that feels as good as it performs. My work
                 spans secure backend systems written in{" "}
                 <span className="text-slate-200">Laravel, Django, and ASP.NET</span>
-                , real-time mobile experiences in{" "}
-                <span className="text-slate-200">native Java/Android</span>, and
+                , robust API architectures in{" "}
+                <span className="text-slate-200">Node.js and PHP</span>, and
                 modern frontends powered by{" "}
                 <span className="text-slate-200">React and Next.js</span>.
               </p>
@@ -60,23 +75,27 @@ export default function About() {
                 <span className="font-semibold text-cyan-300">
                   Kontent.ai &amp; the headless CMS movement
                 </span>
-                — designing structured content models that deliver to web,
-                mobile, and any channel that comes next.
+                — designing structured content models and omni-channel
+                delivery pipelines that power lightning-fast, content-rich
+                web experiences.
               </p>
             </div>
 
-            {/* Tag row */}
-            <div className="mt-8 flex flex-wrap gap-2">
+            {/* accent bar */}
+            <div className="mt-8 h-1 w-24 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" />
+
+            {/* tag pills */}
+            <div className="mt-6 flex flex-wrap gap-2">
               {[
                 "Clean code",
                 "API design",
                 "DX matters",
                 "Pixel-perfect UI",
-                "Mobile-first",
+                "Responsive design",
               ].map((t) => (
                 <span
                   key={t}
-                  className="rounded-full border border-slate-700/80 bg-slate-900/60 px-3 py-1 text-xs font-medium text-slate-300"
+                  className="rounded-full border border-slate-700/80 bg-slate-900/60 px-3.5 py-1 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
                 >
                   {t}
                 </span>
@@ -84,25 +103,30 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right — highlight cards */}
+          {/* ── right highlight cards ── */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {HIGHLIGHTS.map((h, i) => (
-              <div
-                key={h.title}
-                className="reveal neon-border group rounded-2xl bg-slate-900/40 p-6 transition-transform hover:-translate-y-1"
-                style={{ transitionDelay: `${i * 80}ms` }}
-              >
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-500/20 text-cyan-300 ring-1 ring-inset ring-cyan-400/20">
-                  <h.icon className="h-5 w-5" strokeWidth={2} />
+            {HIGHLIGHTS.map((h, i) => {
+              const Icon = h.icon;
+              return (
+                <div
+                  key={h.title}
+                  className="reveal neon-border group rounded-2xl bg-slate-900/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-slate-800/50"
+                  style={{ transitionDelay: `${i * 80}ms` }}
+                >
+                  <div
+                    className={`grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br ${h.bg} ${h.text} ring-1 ring-inset ${h.ring} transition-transform duration-300 group-hover:scale-110`}
+                  >
+                    <Icon className="h-5.5 w-5.5" strokeWidth={2} />
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold text-white">
+                    {h.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                    {h.desc}
+                  </p>
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-white">
-                  {h.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">
-                  {h.desc}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

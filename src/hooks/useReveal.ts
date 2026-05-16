@@ -1,32 +1,49 @@
 import { useEffect } from "react";
 
 /**
- * useReveal — sets up an IntersectionObserver that toggles the
- * `is-visible` class on any element with the `.reveal` class as
- * it scrolls into the viewport. Provides a polished entrance
- * animation without pulling in a heavy animation library.
+ * useReveal — observes every `.reveal` element and adds `is-visible`
+ * when it enters the viewport. Re-queries after a short delay to
+ * catch any elements that rendered after the initial mount (e.g.
+ * after a filter change or async load).
  */
 export function useReveal() {
   useEffect(() => {
-    const elements = document.querySelectorAll<HTMLElement>(".reveal");
     if (!("IntersectionObserver" in window)) {
-      elements.forEach((el) => el.classList.add("is-visible"));
+      document.querySelectorAll<HTMLElement>(".reveal").forEach((el) => {
+        el.classList.add("is-visible");
+      });
       return;
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
             observer.unobserve(entry.target);
           }
-        });
+        }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    const observeAll = () => {
+      document.querySelectorAll<HTMLElement>(".reveal").forEach((el) => {
+        if (!el.classList.contains("is-visible")) {
+          observer.observe(el);
+        }
+      });
+    };
+
+    // initial pass
+    observeAll();
+
+    // catch late-rendered elements (e.g. after filter changes)
+    const timeout = setTimeout(observeAll, 600);
+
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+    };
   }, []);
 }

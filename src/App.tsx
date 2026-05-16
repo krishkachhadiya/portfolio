@@ -9,11 +9,10 @@ import { useReveal } from "./hooks/useReveal";
 
 /**
  * App — top-level layout for the developer portfolio.
- * Wires together every section in a single-page flow with
- * smooth scrolling, sticky frosted nav, and reveal animations.
+ * Wires every section together with scroll-reveal animations,
+ * a frosted nav, and consistent section dividers.
  */
 export default function App() {
-  // Activate scroll-triggered fade-in animations site-wide.
   useReveal();
 
   return (
