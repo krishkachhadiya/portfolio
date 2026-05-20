@@ -18,7 +18,7 @@ export default function Footer() {
         {/* copyright */}
         <p className="text-center text-sm text-slate-500 md:text-left">
           © {year}{" "}
-          <span className="font-semibold text-slate-300">dev.stack</span>{" "}
+          <span className="font-semibold text-slate-300">Krish Kachhadiya</span>{" "}
           — Crafted with React, Tailwind &amp;{" "}
           <Heart className="inline h-3.5 w-3.5 fill-pink-500/50 text-pink-500" />.
         </p>

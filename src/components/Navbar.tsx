@@ -60,7 +60,7 @@ export default function Navbar() {
             <Code2 className="h-5 w-5 text-slate-950" strokeWidth={2.5} />
           </span>
           <span className="text-base font-semibold tracking-tight text-slate-100">
-            dev<span className="gradient-text">.stack</span>
+            Krish<span className="gradient-text">Kachhadiya</span>
           </span>
         </button>
 
