@@ -1,10 +1,10 @@
-import { ExternalLink, GraduationCap, Boxes, Cloud } from "lucide-react";
+import { GraduationCap, Boxes, Cloud, ExternalLink } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GithubIcon } from "./BrandIcons";
 
 /**
- * Projects — three featured project cards with gradient covers,
- * floating icons, tech-stack chips, and animated gradient borders.
+ * Projects — the entire card is a link to the GitHub repo.
+ * No separate "case study" or GitHub button — just click
+ * anywhere on the card to open the repo.
  */
 interface Project {
   title: string;
@@ -13,6 +13,7 @@ interface Project {
   icon: LucideIcon;
   cover: string;
   accent: string;
+  repo: string; // GitHub repo URL
 }
 
 const PROJECTS: Project[] = [
@@ -24,15 +25,17 @@ const PROJECTS: Project[] = [
     icon: GraduationCap,
     cover: "from-rose-500 via-red-500 to-orange-500",
     accent: "shadow-rose-500/30",
+    repo: "https://github.com/krishkachhadiya/Online_Examination_SystemWithAutoGrading", 
   },
   {
     title: "Full-Stack REST API & Dashboard",
     description:
-      "A scalable RESTful API built with Django and Node.js, paired with a React admin dashboard for real-time data management, role-based access control, and rich analytics visualisation.",
-    stack: ["Django", "Node.js", "React", "PostgreSQL"],
+      "A scalable RESTful API built with Next.js and Node.js, paired with a React admin dashboard for real-time data management, role-based access control, and rich analytics visualisation.",
+    stack: ["Next.js", "Node.js", "React", "PostgreSQL"],
     icon: Boxes,
     cover: "from-emerald-400 via-teal-500 to-cyan-500",
     accent: "shadow-emerald-500/30",
+    repo: "https://github.com/krishkachhadiya/admin-panel", 
   },
   {
     title: "Headless CMS Integration",
@@ -42,6 +45,7 @@ const PROJECTS: Project[] = [
     icon: Cloud,
     cover: "from-cyan-400 via-violet-500 to-pink-500",
     accent: "shadow-violet-500/40",
+    repo: "https://github.com/krishkachhadiya/my-kontent-app", 
   },
 ];
 
@@ -59,12 +63,11 @@ export default function Projects() {
           </span>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
             Selected{" "}
-            <span className="gradient-text">projects</span> &amp; case studies.
+            <span className="gradient-text">projects</span> &amp; repositories.
           </h2>
           <p className="mt-4 text-base text-slate-400 sm:text-lg">
-            A small slice of the things I&rsquo;ve shipped recently — from
-            secure exam platforms to scalable APIs and headless CMS
-            integrations.
+            A small slice of the things I&rsquo;ve shipped recently — click
+            any card to explore the code on GitHub.
           </p>
         </div>
 
@@ -73,8 +76,11 @@ export default function Projects() {
           {PROJECTS.map((p, i) => {
             const Icon = p.icon;
             return (
-              <article
+              <a
                 key={p.title}
+                href={p.repo}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`reveal hover-rotate neon-border group relative flex flex-col overflow-hidden rounded-3xl bg-slate-900/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${p.accent}`}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
@@ -133,28 +139,20 @@ export default function Projects() {
                     {p.stack.map((s) => (
                       <span
                         key={s}
-                        className="rounded-md border border-slate-700/80 bg-slate-800/60 px-2.5 py-1 text-[11px] font-medium text-slate-300 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
+                        className="rounded-md border border-slate-700/80 bg-slate-800/60 px-2.5 py-1 text-[11px] font-medium text-slate-300 transition-colors group-hover:border-cyan-400/40 group-hover:text-cyan-300"
                       >
                         {s}
                       </span>
                     ))}
                   </div>
 
-                  {/* action row */}
-                  <div className="mt-6 flex items-center justify-between border-t border-slate-800 pt-4">
-                    <button className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200">
-                      View case study
-                      <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                    </button>
-                    <button
-                      aria-label="Source code"
-                      className="grid h-9 w-9 place-items-center rounded-lg border border-slate-700/80 text-slate-400 transition-all hover:border-cyan-400/50 hover:text-white hover:bg-slate-800/60"
-                    >
-                      <GithubIcon className="h-4 w-4" />
-                    </button>
+                  {/* link indicator */}
+                  <div className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-cyan-300 transition-colors group-hover:text-cyan-200">
+                    View on GitHub
+                    <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </div>
                 </div>
-              </article>
+              </a>
             );
           })}
         </div>
